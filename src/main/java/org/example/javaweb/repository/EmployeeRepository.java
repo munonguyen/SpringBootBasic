@@ -1,6 +1,6 @@
-package org.example.javaweb.Repository;
+package org.example.javaweb.repository;
 
-import org.example.javaweb.Repository.Entity.Employee;
+import org.example.javaweb.repository.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {

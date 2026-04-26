@@ -1,15 +1,18 @@
 package org.example.javaweb.Controller;
 
 
-import org.example.javaweb.Repository.EmployeeRepository;
-import org.example.javaweb.Repository.Entity.Employee;
+import org.example.javaweb.repository.EmployeeRepository;
+import org.example.javaweb.repository.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class EmployeeController {
@@ -24,11 +27,51 @@ public class EmployeeController {
     }
     @RequestMapping(value="/detail/{id}")
     public String getEmployeegetById(@PathVariable(value="id")Long id,Model model){
-        Employee employee = employeeRepository.findById(id).get();
-        model.addAttribute("employeee",employee);
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isEmpty()) {
+            return "redirect:/";
+        }
+        model.addAttribute("employees", List.of(employee.get()));
         return "EmployeeList";
 
     }
+
+    @GetMapping(value="/update/{id}")
+    public String updateEmployee(@PathVariable(value="id") Long id,Model model){
+        Optional<Employee> employee = employeeRepository.findById(id);
+        if (employee.isEmpty()) {
+            return "redirect:/";
+        }
+        model.addAttribute("employee", employee.get());
+        return "EmployeeUpdate";
+    }
+
+    @PostMapping(value="/save")
+    public String saveEmployee(Employee employee){
+        employeeRepository.save(employee);
+        return "redirect:/detail/" + employee.getId();
+    }
+    @GetMapping(value="/add")
+    public String addEmployee(Model model){
+        Employee employee = new Employee();
+        model.addAttribute("employee",employee);
+        return "EmployeeAdd";
+    }
+    @RequestMapping(value="/insert")
+    public String insertEmployee(Employee employee){
+        employeeRepository.save(employee);
+        return "redirect:/detail/"+employee.getId();
+    }
+    @GetMapping(value="/delete/{id}")
+    public String deleteEmployee(@PathVariable(value="id") Long id,Model model ){
+        if(employeeRepository.findById(id).isPresent()){
+            Employee employee = employeeRepository.findById(id).get();
+            employeeRepository.delete(employee);
+
+        }
+        return "redirect:/";
+    }
+
 
 
 }

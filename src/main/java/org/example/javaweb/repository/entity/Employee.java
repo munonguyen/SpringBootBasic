@@ -1,4 +1,4 @@
-package org.example.javaweb.Repository.Entity;
+package org.example.javaweb.repository.entity;
 
 
 import jakarta.persistence.*;
