@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,13 +54,18 @@ public class EmployeeController {
     }
 
     @PostMapping(value="/save")
-    public String saveEmployee(Employee employee){
+    public String saveEmployee(Employee employee, @RequestParam(value = "companyId", required = false) Long companyId){
+        if (companyId != null) {
+            companyRepository.findById(companyId).ifPresent(employee::setCompany);
+        }
         employeeRepository.save(employee);
         return "redirect:/detail/" + employee.getId();
     }
     @GetMapping(value="/add")
     public String addEmployee(Model model){
         Employee employee = new Employee();
+        List<Company> companies = companyRepository.findAll();
+        model.addAttribute("companies",companies);
         model.addAttribute("employee",employee);
         return "EmployeeAdd";
     }

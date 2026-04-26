@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
     <title>Employee Add</title>
@@ -25,6 +26,15 @@
         <p>
             <label>Employee Address: </label>
             <input class="form-control" type="text" th:field="*{address}"/>
+        </p>
+        <p>
+            <label>Company: </label>
+            <select class="form-select" name="companyId">
+                <option value="">Select options</option>
+                <option th:each="comp : ${companies}"
+                        th:value="${comp.id}"
+                        th:text="${comp.name}"></option>
+            </select>
         </p>
         <p>
             <button type="submit">Add</button>
