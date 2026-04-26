@@ -1,7 +1,9 @@
 package org.example.javaweb.Controller;
 
 
+import org.example.javaweb.repository.CompanyRepository;
 import org.example.javaweb.repository.EmployeeRepository;
+import org.example.javaweb.repository.entity.Company;
 import org.example.javaweb.repository.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +20,14 @@ import java.util.Optional;
 public class EmployeeController {
     @Autowired
     EmployeeRepository employeeRepository;
+    @Autowired
+    CompanyRepository companyRepository;
 
     @RequestMapping(value="/")
     public String getAllEmployees(Model model){
         List<Employee> employees = employeeRepository.findAll();
+        List<Company> companies = companyRepository.findAll();
+
         model.addAttribute("employees",employees);
         return "EmployeeList";
     }
